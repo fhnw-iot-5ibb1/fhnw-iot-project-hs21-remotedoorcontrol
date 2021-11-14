@@ -1,5 +1,5 @@
 # IoT Engineering
-## Project MY_TEAM_PROJECT_TITLE
+## Project RemoteDoorControl
 
 > *Note: Do not work on this repository right away.*<br/>
 > *[Create your copy or join a team by clicking this GitHub Classroom link](https://classroom.github.com/a/yaT6h80x).*
@@ -14,8 +14,8 @@ This project is part of the [IoT Engineering](../../../fhnw-iot) course.
 * Both team members are able to explain the project.
 
 ### Team members
-* @MY_TEAM_PROJECT_GITHUB_USER_1, REAL_NAME_1
-* @MY_TEAM_PROJECT_GITHUB_USER_2, REAL_NAME_2
+* @Daught, Sebastian Fernandez
+* @christianwernlistudentsfhnw, Christian Wernli
 
 ## Deliverables
 The following deliverables are mandatory.
@@ -23,13 +23,11 @@ The following deliverables are mandatory.
 ### Source code
 Source code, Arduino C, JS or Python, committed to (this) project repo.
 
-[Arduino/MY_TEAM_PROJECT/MY_TEAM_PROJECT.ino](Arduino/MY_TEAM_PROJECT_FILE.ino)
+[RemoteDoorControl/Arduino/DoorControl.ino](RemoteDoorControl/Arduino/DoorControl.ino)
 
-[Nodejs/MY_TEAM_PROJECT.js](Nodejs/MY_TEAM_PROJECT_FILE.js)
+[RemoteDoorControl/RPI/Nodejs/frontend/client.js](RemoteDoorControl/RPI/Nodejs/frontend/client.js)
 
-[Python/MY_TEAM_PROJECT.py](Nodejs/MY_TEAM_PROJECT_FILE.py)
-
-... (adapt as required)
+[RemoteDoorControl/RPI/Nodejs/backend/server.js](RemoteDoorControl/RPI/Nodejs/backend/server.js)
 
 1) Embedded code / microcontroller firmware.
 2) Glue Code used on the gateway or "in the cloud".
