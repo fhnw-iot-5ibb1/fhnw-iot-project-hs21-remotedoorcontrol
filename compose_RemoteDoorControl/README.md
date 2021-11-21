@@ -35,17 +35,20 @@ Die Halterung für Motor, Fingerprint, Verschalung für Raspberry & Arduino sind
 
 Download Zerotier-VPN to access the API-Endpoint
 - Download https://www.zerotier.com/download/
-- Join Network abfd31bd47ba5b87
+- Join Network `abfd31bd47ba5b87`
 
 ## Project Raspberry [Nodejs API-Endpoint]
 
-Repository-Folder frontend: [RemoteDoorControl/Arduino/backend/server.js](RemoteDoorControl/Arduino/backend/server.js)
+### Repository-Folder frontend:
 
-Repository-Folder backend: [RemoteDoorControl/Arduino/frontend/index.js](RemoteDoorControl/Arduino/frontend/index.js)
+1) `npm install` on RemoteDoorControl/Arduino/backend 
+2) `npm start` will start the backend server on http://localhost:5555/ 
 
+### Repository-Folder backend:
 
+1) `npm install` on RemoteDoorControl/Arduino/frontend
+2) `npm start` will start the backend server on http://localhost:5551/ 
 
 ## Project Arduino [INO]
-Repository: [RemoteDoorControl/Arduino/DoorControl.ino](RemoteDoorControl/Arduino/DoorControl.ino)
 
-
+Upload the file [RemoteDoorControl/Arduino/DoorControl.ino](RemoteDoorControl/Arduino/DoorControl.ino) to Arduino and run script
