@@ -13,8 +13,8 @@ Folgende API-Endpoint ist momentan vorgesehen:
 
 | Verb | Ressouce | Description |
 |:-----|:--------|:------|
-| GET | /api/door | get the door status (open/close) |
-| POST | /api/door | moves the bolt on the door (open/close) |
+| GET | /api/door | moves the bolt on the door (open/close) |
+| GET | /api/status | get the door status (open/close) |
 
 
 Die Halterung für Motor, Fingerprint, Verschalung für Raspberry & Arduino sind 3D-gedruckte Teile und in einer Miniatur Türe verbaut werden (für Demozwecke)
@@ -35,17 +35,28 @@ Die Halterung für Motor, Fingerprint, Verschalung für Raspberry & Arduino sind
 
 Download Zerotier-VPN to access the API-Endpoint
 - Download https://www.zerotier.com/download/
-- Join Network abfd31bd47ba5b87
+- Join Network `abfd31bd47ba5b87`
+
+Once connected to the Zerotrust Network: API calls can be made using:  http://192.168.192.20:4001
 
 ## Project Raspberry [Nodejs API-Endpoint]
 
-Repository-Folder frontend: [RemoteDoorControl/Arduino/backend/server.js](RemoteDoorControl/Arduino/backend/server.js)
+### Repository-Folder frontend:
 
-Repository-Folder backend: [RemoteDoorControl/Arduino/frontend/index.js](RemoteDoorControl/Arduino/frontend/index.js)
+1) `npm install` on RemoteDoorControl/Arduino/backend 
+2) `npm start` will start the backend server on http://localhost:4001/ 
 
+### Repository-Folder backend:
 
+1) `npm install` on RemoteDoorControl/Arduino/frontend
+2) `npm run start` will start the backend server on http://localhost:4001/ 
+2.1) start server in dispatched mode `forever start server.js`
+
+For Development purposes
+`npm run dev` will start the backend server on http://localhost:4001/ 
+
+Find blocking ports: `lsof -i :4001 -t` --> `kill xxx`
 
 ## Project Arduino [INO]
-Repository: [RemoteDoorControl/Arduino/DoorControl.ino](RemoteDoorControl/Arduino/DoorControl.ino)
 
-
+Upload the file [RemoteDoorControl/Arduino/00-Motor_Control.ino](RemoteDoorControl/Arduino/00-Motor_Control.ino) to Arduino and run script
