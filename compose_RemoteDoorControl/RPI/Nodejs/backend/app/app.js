@@ -8,22 +8,64 @@ const User = require("./model/user");
 const auth = require("./middleware/auth");
 
 const app = express();
-
 app.use(express.json({ limit: "50mb" }));
-
-
-
 const SerialPort = require('serialport');
+const Readline = require('@serialport/parser-readline');
 
 // Serial
-var portName = '/dev/ttyUSB0';
+var portName = '/dev/ttyUSB1';
 var sp = new SerialPort(portName, {
-        baudRate: 115200,
+        baudRate: 9600,
         dataBits: 8,
         parity: 'none',
         stopBits: 1,
         flowControl: false
 }); // instanciate serial port
+
+sp.on('open',function() {
+  console.log('Serial Port ' + portName + ' is opened.');
+});
+
+const timer = ms => new Promise( res => setTimeout(res, ms));
+
+app.get("/api/door", (req, res) => {
+    const parser = sp.pipe(new Readline({delemiter: '\n'}));
+    sp.write('doorAction\n');
+      
+    parser.on('data', function (data) {
+      var dataUTF8 = data.toString('utf-8');
+      console.log(dataUTF8);   
+    });
+     
+    return res.status(200).json({status: 'ok', data:response});
+});
+
+
+app.get("/api/status", (req, res) => {
+    const parser = sp.pipe(new Readline({delemiter: '\r\n'}));
+    sp.write('getState\n');
+    
+      parser.on('data', function (data) {
+        var dataUTF8 = data.toString('utf-8');
+        console.log(dataUTF8);   
+      });
+    
+    return res.status(200).json({status: 'ok', data:response});
+});
+
+// This should be the last route else any after it won't work
+app.use("*", (req, res) => {
+return res.status(404).json({
+  success: "false",
+  message: "Page not found",
+  error: {
+    statusCode: 404,
+    message: "You reached a route that is not defined on this server",
+  },
+});
+});
+
+const response = "{'success':'true','message':'1, 1'}";
 
 
 /*"/register", async (req, res) => {
@@ -106,40 +148,5 @@ app.post("/login", async (req, res) => {
     console.log(err);
   }
 });*/
-
-app.get("/api/door", (req, res) => {
-  	console.log('test');
-        var ByteLength = require('@serialport/parser-byte-length');
-        var parser = sp.pipe(new ByteLength({length: 16}));
-
-sp.write('test');
-        parser.on('data', function (data) {
-                var dataUTF8 = data.toString('utf-8');
-                if (dataUTF8.substring(0, 1) === ":") {
-                        console.log('Data: ' + data);
-                }
-        });
-
-	res.status(200).json({
-		success:"true",
-		message: 'welcome :) - door opened'
-	});
-});
-
-app.post("/api/door", (req, res) => {
-  res.status(200).send("Door opened or closed");
-});
-
-// This should be the last route else any after it won't work
-app.use("*", (req, res) => {
-  res.status(404).json({
-    success: "false",
-    message: "Page not found",
-    error: {
-      statusCode: 404,
-      message: "You reached a route that is not defined on this server",
-    },
-  });
-});
 
 module.exports = app;

@@ -47,7 +47,13 @@ Download Zerotier-VPN to access the API-Endpoint
 ### Repository-Folder backend:
 
 1) `npm install` on RemoteDoorControl/Arduino/frontend
-2) `npm start` will start the backend server on http://localhost:5551/ 
+2) `npm run start` will start the backend server on http://localhost:4001/ 
+2.1) start server in dispatched mode `forever start server.js`
+
+For Development purposes
+`npm run dev` will start the backend server on http://localhost:4001/ 
+
+Find blocking ports: `lsof -i :4001 -t` --> `kill xxx`
 
 ## Project Arduino [INO]
 
