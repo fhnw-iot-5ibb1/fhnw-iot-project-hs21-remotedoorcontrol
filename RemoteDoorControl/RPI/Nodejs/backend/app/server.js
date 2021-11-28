@@ -1,10 +1,20 @@
+"use strict";
 const http = require("http");
+const https = require("https");
 const app = require("./app");
-const server = http.createServer(app);
+const fs = require('fs');
 
 const { API_PORT } = process.env;
 const port = process.env.PORT || API_PORT;
 
-server.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+const options = {
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem')
+};
+
+const httpsServer = https.createServer(options, app);
+
+httpsServer.listen(port, () => {
+	console.log('HTTPS Server running on port 443');
 });
+

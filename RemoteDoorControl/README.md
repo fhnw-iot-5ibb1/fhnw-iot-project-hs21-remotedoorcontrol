@@ -57,6 +57,12 @@ For Development purposes
 
 Find blocking ports: `lsof -i :4001 -t` --> `kill xxx`
 
+### Generating self-signed-certificate
+Create certificate and place it into root folder of Nodejs app. Files: key.pem, cert.pem
+`openssl genrsa -out key.pem`
+`openssl req -new -key key.pem -out csr.pem`
+`openssl x509 -req -days 9999 -in csr.pem -signkey key.pem -out cert.pem`
+`rm csr.pem`
 ## Project Arduino [INO]
 
 Upload the file [RemoteDoorControl/Arduino/00-Motor_Control.ino](RemoteDoorControl/Arduino/00-Motor_Control.ino) to Arduino and run script

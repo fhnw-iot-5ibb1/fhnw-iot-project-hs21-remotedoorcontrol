@@ -2,12 +2,12 @@ require("dotenv").config();
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
 const User = require("./model/user");
 const auth = require("./middleware/auth");
 
 const app = express();
 app.use(express.json({ limit: "50mb" }));
+
 const SerialPort = require('serialport');
 const Readline = require('@serialport/parser-readline');
 
@@ -27,11 +27,21 @@ sp.on('open',function() {
 
 const timer = ms => new Promise( res => setTimeout(res, ms));
 
-app.get("/api/door", (req, res) => {
+const session = require('cookie-session');
+app.use(
+  session({
+    secret: "@asd4°@#41_",
+    httpOnly: true,  // Don't let browser javascript access cookies.
+    secure: true, // Only use cookies over https.
+  })
+);
+
+app.get("/api/door", (req, res) => {  
     const parser = sp.pipe(new Readline({delemiter: '\n'}));
     sp.write('doorAction\n');
       
     parser.on('data', function (data) {
+      console.log('something happening');
       var dataUTF8 = data.toString('utf-8');
       console.log(dataUTF8);   
     });
