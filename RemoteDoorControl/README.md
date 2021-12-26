@@ -57,6 +57,9 @@ For Development purposes
 
 Find blocking ports: `lsof -i :4001 -t` --> `kill xxx`
 
+## To find which USB interface is used
+dmesg | grep USB
+
 ### Generating self-signed-certificate
 Create certificate and place it into root folder of Nodejs app. Files: key.pem, cert.pem
 `openssl genrsa -out key.pem`

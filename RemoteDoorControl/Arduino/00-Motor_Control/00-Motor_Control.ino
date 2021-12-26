@@ -17,7 +17,7 @@
 #include "02-DoorOpen.h"
 #include "03-DoorClose.h"
 SoftwareSerial mySerial(8, 9);
-Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
+//Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 char inputBuffer[10];   
 
 void setup() {
@@ -25,8 +25,8 @@ void setup() {
   Serial.begin (9600);
   
   // Set all the motor control pins to outputs
-  pinMode(enA, OUTPUT);
-  pinMode(enB, OUTPUT);
+  //pinMode(enA, OUTPUT);
+  //pinMode(enB, OUTPUT);
   pinMode(in1, OUTPUT);
   pinMode(in2, OUTPUT);
   pinMode(in3, OUTPUT);
@@ -63,7 +63,7 @@ void setup() {
  // **************** ENDSTOPS **********************
 
 // **************** FINGERPRINT **********************
-
+/*
       // set the data rate for the sensor serial port
   finger.begin(57600);
   
@@ -79,45 +79,49 @@ void setup() {
   //Serial.println("Waiting for valid finger...");
 
   // **************** ENDFINGERPRINT **********************
+  */
 }
 
 void loop() {
-  
-  if (Serial.available() > 0) {
+    if (Serial.available() > 0) {
       String data = Serial.readStringUntil('\n');
       if(data == "doorAction"){
         motorAisMoving = 1;
         motorBisMoving = 1;
-        String doorActionMessage = "{'success':'true','message':'"+ String(isOpenB) + "', '" + String(isOpenA) +"'}\r\n'}";
+        String doorActionMessage = "";
+        doorActionMessage = "{'success':'true','message':'"+ String(isOpenB) + "', '" + String(isOpenA) + "'}'";
         Serial.println(doorActionMessage);
       }
       if(data == "getState"){
-          String doorStateMessage = "{'success':'true','message':'"+ String(isOpenB) + "', '" + String(isOpenA) +"'}\r\n'}";
+          String doorStateMessage = "";
+          doorStateMessage = "{'success':'true','message':'"+ String(isOpenB) + "', '" + String(isOpenA) + "'}'";
          Serial.println(doorStateMessage);
       }
     }
-      
+    /*
     int endStopDoorAOpen = digitalRead(S0); // 0 == LOW 
     if(endStopDoorAOpen == 0){
       motorAisMoving = 1;      
-    }
+    }*/
 
     if(motorAisMoving == 1){      
       changeStateDoorA();
     } 
     
-    int endStopDoorBOpen = digitalRead(S0); // 0 == LOW 
+    
+    /*int endStopDoorBOpen = digitalRead(S0); // 0 == LOW
     if(endStopDoorBOpen == 0){
       motorBisMoving = 1;      
     }
 
-    if(motorBisMoving == 1){      
+*/
+    if(motorBisMoving == 1){   
       changeStateDoorB();
     }  
 
-    uint8_t isValidFinger = validateFingerPrintAndChangeState();        
-
-  delay(500);
+    // uint8_t isValidFinger = validateFingerPrintAndChangeState();        
+   
+  delay(150);
 }
 
 void changeStateDoorA(){  
@@ -136,7 +140,7 @@ void changeStateDoorB(){
     }
 }
 
-
+/*
 // returns -1 if failed, otherwise returns ID #
 int validateFingerPrintAndChangeState() {
   uint8_t p = finger.getImage();
@@ -158,3 +162,4 @@ int validateFingerPrintAndChangeState() {
     changeStateDoorB();
   return finger.fingerID; 
 }
+*/

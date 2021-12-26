@@ -1,23 +1,21 @@
 // Pins
 
 // Motor A connections
-int enA = 7;
-int in1 = 6;
-int in2 = 5;
+int in1 = 5;
+int in2 = 4;
 // Motor B connections
-int enB = 2;
-int in3 = 4;
-int in4 = 3;
+int in3 = 7;
+int in4 = 6;
 
 // Endstop to change state (Inside)
 int S0 = A0;
-// Endstop "Door Open"
+// Endstop "Door B Open"
 int S1 = A1;
-// Endstop "Door Closed"
+// Endstop "Door B Closed"
 int S2 = A2;
-// Endstop "Door Open"
+// Endstop "Door A Open"
 int S3 = A3;
-// Endstop "Door Closed"
+// Endstop "Door A Closed"
 int S4 = A4;
 
 //Fingerprint Sensor
@@ -33,3 +31,5 @@ int isOpenB = 0; // door motor B is closed = 0
 
 int changedStateDoorAFinit = 0;
 int changedStateDoorBFinit = 0;
+
+int speed = 254;
