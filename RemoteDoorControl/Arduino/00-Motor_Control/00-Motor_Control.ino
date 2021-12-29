@@ -89,12 +89,12 @@ void loop() {
         motorAisMoving = 1;
         motorBisMoving = 1;
         String doorActionMessage = "";
-        doorActionMessage = "{'success':'true','message':'"+ String(isOpenB) + "', '" + String(isOpenA) + "'}'";
+        doorActionMessage = '{"success":"true","motor-a":"'+ String(isOpenA) + '", "motor-b": "' + String(isOpenB) + '"}';
         Serial.println(doorActionMessage);
       }
       if(data == "getState"){
           String doorStateMessage = "";
-          doorStateMessage = "{'success':'true','message':'"+ String(isOpenB) + "', '" + String(isOpenA) + "'}'";
+          doorStateMessage = '{"success":"true","motor-a":"'+ String(isOpenA) + '", "motor-b": "' + String(isOpenB) + '"}';
          Serial.println(doorStateMessage);
       }
     }

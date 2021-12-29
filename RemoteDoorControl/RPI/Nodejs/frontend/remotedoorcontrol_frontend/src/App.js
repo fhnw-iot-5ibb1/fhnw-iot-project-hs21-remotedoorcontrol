@@ -11,13 +11,25 @@ function App() {
     let [error, setError ] = useState("");
 
     
+    const requestInitialDoorState = () => {
+        axios.get("https://192.168.192.52:4001/api/status").then(
+        result => {
+            setLoaded(false);
+            setError(false);            
+            setDoor(result.data.data.slice(29, result.data.data.length -9) === '1' ? true : false);
+        },
+        error => {
+            setError("asd"); 
+        }
+    );
+    }
 
     const requestDoorState = () => {
         axios.get("https://192.168.192.52:4001/api/status").then(
         result => {            
-            setItems(result.data);
             setLoaded(true);
-            setError(false);            
+            setError(false);
+            setItems(result.data.data);
         },
         error => {
             setError("asd"); 
@@ -38,7 +50,7 @@ function App() {
 
     return (
         <> 
-        <DoorStateDisplay isLoaded={isLoaded} items={items} error={error} requestDoorState={requestDoorState}/>
+        <DoorStateDisplay isLoaded={isLoaded} error={error} items={items} requestDoorState={requestDoorState} requestInitialDoorState={requestInitialDoorState}/>
         <DoorSwitch id="door" checked={door} onChange={onDoorChange}/>        
         <DoorLog/>
         </>

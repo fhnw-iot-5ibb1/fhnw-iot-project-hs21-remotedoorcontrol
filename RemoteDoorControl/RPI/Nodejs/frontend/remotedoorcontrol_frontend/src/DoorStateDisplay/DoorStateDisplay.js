@@ -3,7 +3,8 @@ import React, { Component } from "react";
 export default class DoorStateDisplay extends Component {
 
     componentDidMount() {
-         this.interval = setInterval(() => this.props.requestDoorState(), 1000); 
+        this.props.requestInitialDoorState();
+        this.interval = setInterval(() => this.props.requestDoorState(), 1000);
     }
 
     componentWillUnmount() { }
@@ -18,7 +19,7 @@ export default class DoorStateDisplay extends Component {
         } else {
             return (
                 <ul>
-                    <li key={items.data}>{items.data}</li>
+                    <li key={items}>{items}</li>
                 </ul>                                
             );
         }

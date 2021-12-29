@@ -1,14 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import './DoorSwitch.scss';
-import { useSpring, animated as a } from "react-spring";
-
-/*
-Toggle Switch Component
-Note: id, checked and onChange are required for ToggleSwitch component to function.
-The props name, small, disabled and optionLabels are optional.
-Usage: <ToggleSwitch id="id" checked={value} onChange={checked => setValue(checked)}} />
-*/
 
 const DoorSwitch = ({ id, name, checked, onChange, optionLabels, small, disabled }) => {
  
