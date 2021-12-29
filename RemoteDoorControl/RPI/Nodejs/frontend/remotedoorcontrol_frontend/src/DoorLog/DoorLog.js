@@ -18,6 +18,7 @@ export const DoorLog = () => {
 
 
     return (
+        <div className="LoggingTable">
         <table {...getTableProps()}>
             <thead>
                 {headerGroups.map((headerGroup) => (
@@ -49,5 +50,6 @@ export const DoorLog = () => {
             </tbody>
 
         </table>
+        </div>
         )
 }

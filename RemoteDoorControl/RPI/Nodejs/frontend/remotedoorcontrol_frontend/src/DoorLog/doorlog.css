@@ -24,3 +24,16 @@ doorlog {
         background-color: #04AA6D;
         color: white;
     }
+
+.LoggingTable{
+    align-items: center;    
+    color: #fff;
+    display: flex;
+    flex-direction: column;    
+    justify-content: center;
+    padding: 1rem 0;
+    position: absolute;
+    text-align: center;
+    z-index: 1;
+    width: 100%;
+}

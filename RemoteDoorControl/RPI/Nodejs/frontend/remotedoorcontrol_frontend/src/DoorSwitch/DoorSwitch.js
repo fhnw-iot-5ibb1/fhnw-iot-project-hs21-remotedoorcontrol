@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import './DoorSwitch.scss';
+import { useSpring, animated as a } from "react-spring";
 
 /*
 Toggle Switch Component
@@ -10,10 +11,11 @@ Usage: <ToggleSwitch id="id" checked={value} onChange={checked => setValue(check
 */
 
 const DoorSwitch = ({ id, name, checked, onChange, optionLabels, small, disabled }) => {
-
-    return (
-        <div className={"door-switch" + (small ? " small-switch" : "")}>
-            <input
+ 
+  return(            
+      <div className="curtain">
+        <div className="curtain__wrapper">
+        <input
                 type="checkbox"
                 name={name}
                 className="door-switch-checkbox"
@@ -22,29 +24,25 @@ const DoorSwitch = ({ id, name, checked, onChange, optionLabels, small, disabled
                 onChange={e => onChange(e.target.checked)}
                 disabled={disabled}
             />
-            {id ? (
-                <label className="door-switch-label" htmlFor={id}>
-                    <span
-                        className={
-                            disabled
-                                ? "door-switch-inner door-switch-disabled"
-                                : "door-switch-inner"
-                        }
-                        data-yes={optionLabels[0]}
-                        data-no={optionLabels[1]}
-                    />
-                    <span
-                        className={
-                            disabled
-                                ? "door-switch-switch door-switch-disabled"
-                                : "door-switch-switch"
-                        }
-                    />
-                </label>
-            ) : null}
-        </div>
-    );
+          
+          <div className="curtain__panel curtain__panel--left">
+            <h1>Click to open </h1>
+          </div>
+          
+          <div className="curtain__content">
+          <img src="froggo.png"/>
+            <h2>Door Unlocked!</h2>
+          </div>
+          
+          <div className="curtain__panel curtain__panel--right">
+            <h1>&nbsp; the door</h1>
+          </div>          
+        </div> 
+      </div>
+
+    );   
 }
+
 
 // Set optionLabels for rendering.
 DoorSwitch.defaultProps = {
