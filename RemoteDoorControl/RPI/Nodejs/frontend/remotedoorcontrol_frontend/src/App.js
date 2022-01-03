@@ -2,17 +2,25 @@ import React, { useState } from 'react';
 import DoorSwitch from './DoorSwitch/DoorSwitch'
 import DoorStateDisplay from './DoorStateDisplay/DoorStateDisplay'
 import { DoorLog } from './DoorLog/DoorLog';
-import axios from 'axios';
+import axios, { Axios } from 'axios';
+const https = require('https');
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
  
 function App() {
     let [door, setDoor ] = useState(true);
     let [isLoaded, setLoaded ] = useState(false);
     let [items, setItems ] = useState("");
     let [error, setError ] = useState("");
+    
+      
+      // At request level
+      const agent = new https.Agent({  
+        rejectUnauthorized: false
+      });
 
     
     const requestInitialDoorState = () => {
-        axios.get("https://192.168.192.52:4001/api/status").then(
+        axios.get("https://192.168.192.52:4001/api/status", { httpsAgent: agent }).then(
         result => {
             setLoaded(false);
             setError(false);            
@@ -25,7 +33,7 @@ function App() {
     }
 
     const requestDoorState = () => {
-        axios.get("https://192.168.192.52:4001/api/status").then(
+        axios.get("https://192.168.192.52:4001/api/status", { httpsAgent: agent }).then(
         result => {            
             setLoaded(true);
             setError(false);
@@ -39,7 +47,7 @@ function App() {
 
     const onDoorChange = (checked) => {
         setDoor(checked); 
-       axios.get("https://192.168.192.52:4001/api/door").then(
+       axios.get("https://192.168.192.52:4001/api/door", { httpsAgent: agent }).then(
             result => {
             },
             error => {
