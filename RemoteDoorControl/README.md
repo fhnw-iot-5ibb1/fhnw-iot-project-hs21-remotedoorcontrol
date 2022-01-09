@@ -1,7 +1,5 @@
-# IoT Engineering
-## Project RemoteDoorControl
-
-**Konzept:**
+# IoT Engineering Project description
+## Concept
 
 Remote steuerbares Türschloss mittels abgesicherter Zero-trust networking Lösung (265bit end2end verschlüsselt).
 
@@ -31,34 +29,62 @@ Die Halterung für Motor, Fingerprint, Verschalung für Raspberry & Arduino sind
 - Fingerprint : https://de.aliexpress.com/item/32863746593.html?spm=a2g0o.detail.1000023.4.4c137738Mbhi9o
 - Endstop : https://de.aliexpress.com/item/1005003341364053.html?spm=a2g0o.productlist.0.0.4c071c2fWjLzoe&algo_pvid=5167e6be-1785-477d-864d-ef14ff6518ba&aem_p4p_detail=20211030044023451290956538800023611694&algo_exp_id=5167e6be-1785-477d-864d-ef14ff6518ba-4&pdp_ext_f=%7B%22sku_id%22%3A%2212000025305718909%22%7D
 
-**Zerotrust-VPN**
+### Zerotrust-VPN Configuration
 
-Download Zerotier-VPN to access the API-Endpoint
-- Download https://www.zerotier.com/download/
-- Join Network `abfd31bd47ba5b87`
+**Client (Windows, Android, IOS) Setup:**
 
-Once connected to the Zerotrust Network: API calls can be made using:  http://192.168.192.20:4001
+Download Zerotier-VPN to access the Webservice
+1) Download the zerotier client [Windows](https://www.zerotier.com/download/), [Android](https://play.google.com/store/apps/details?id=com.zerotier.one&hl=en_US&gl=US), [IOS](https://apps.apple.com/us/app/zerotier-one/id1084101492)
+2) Join Network `abfd31bd47ba5b87`
+3) Wait for confirmation of ZeroTier administrator
 
-## Project Raspberry [Nodejs API-Endpoint]
+Once connected to the Zerotrust Network: API calls can be made using:  https://3to5.ch:4001/api/
 
-### Repository-Folder frontend:
+**RaspberryPi (Server) Setup:**
+1) Access Raspberry SSH console access
+2) install zerotier-cli `curl -s https://install.zerotier.com | sudo bash`
+3) or with GPG installed: `curl -s 'https://raw.githubusercontent.com/zerotier/ZeroTierOne/master/doc/contact%40zerotier.com.gpg' | gpg --import && \
+if z=$(curl -s 'https://install.zerotier.com/' | gpg); then echo "$z" | sudo bash; fi`
+4) start service `sudo service zerotier-one restart`
+5) join network `sudo zerotier-one.zerotier-cli join <network id>`
+# Deployment
 
-1) `npm install` on RemoteDoorControl/Arduino/backend 
-2) `npm start` will start the backend server on http://localhost:4001/ 
+**Prerequisite**
+RaspberryPi has joined the Zerotier VPN and is configured properly
+## Deploy on Arduino [INO]
 
-### Repository-Folder backend:
+1) navigate to RemoteDoorControl/Arduino/
+2) Compile and upload project to Arduino [00-Motor_Control.ino](Arduino\00-Motor_Control\00-Motor_Control.ino) 
 
-1) `npm install` on RemoteDoorControl/Arduino/frontend
-2) `npm run start` will start the backend server on http://localhost:4001/ 
-2.1) start server in dispatched mode `forever start server.js`
+## Deployment on Raspberry [backend & frontend]
+The backend is a Nodejs application. 
+The frontend is a reactjs application.
+Both applications run on a single raspberry connected to zerotier VPN network: playground: `abfd31bd47ba5b87`
 
-For Development purposes
-`npm run dev` will start the backend server on http://localhost:4001/ 
+### Deploy backend-service [NodeJs]:
 
-Find blocking ports: `lsof -i :4001 -t` --> `kill xxx`
+1) navigate to RemoteDoorControl/RPI/Nodejs/backend
+2) run `npm install`
+3) plug in Arduino on USB-Serial interface
+3) `npm run start` will start the backend server on https://3to5.ch:4001
+4) nodemon for development purposes is configure and run with `npm run dev`
+2.1) to start server in dispatched mode `forever start server.js`
 
-## To find which USB interface is used
-dmesg | grep USB
+Backend-API is reachable under: https://3to5.ch:4001/api/
+
+Troubleshooting: 
+1) Find blocking ports: `lsof -i :4001 -t` --> `kill xxx`
+2) To find which USB interface is used `dmesg | grep USB`
+
+
+
+### Deploy frontend-service [react-js]:
+
+1) navigate to RemoteDoorControl/RPI/Nodejs/frontend
+2) run `npm install` 
+3) make sure SSL certificates are places on repositories root path
+4) `(HTTPS=true SSL_CRT_FILE=cert.pem SSL_KEY_FILE=key.pem npm start&) run production in HTTPS` will start the frontend-service on https://3to5.ch:3000
+
 
 ### Generating self-signed-certificate
 Create certificate and place it into root folder of Nodejs app. Files: key.pem, cert.pem
@@ -66,6 +92,3 @@ Create certificate and place it into root folder of Nodejs app. Files: key.pem, 
 `openssl req -new -key key.pem -out csr.pem`
 `openssl x509 -req -days 9999 -in csr.pem -signkey key.pem -out cert.pem`
 `rm csr.pem`
-## Project Arduino [INO]
-
-Upload the file [RemoteDoorControl/Arduino/00-Motor_Control.ino](RemoteDoorControl/Arduino/00-Motor_Control.ino) to Arduino and run script
