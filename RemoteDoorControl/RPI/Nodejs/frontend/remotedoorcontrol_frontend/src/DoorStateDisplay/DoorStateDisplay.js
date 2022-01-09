@@ -19,8 +19,8 @@ export default class DoorStateDisplay extends Component {
         } else {
             return (
                 <ul>
-                    <li key={items}>{items}</li>
-                </ul>                                
+                    <span key={items}>{items}</span>
+                </ul>    
             );
         }
     }

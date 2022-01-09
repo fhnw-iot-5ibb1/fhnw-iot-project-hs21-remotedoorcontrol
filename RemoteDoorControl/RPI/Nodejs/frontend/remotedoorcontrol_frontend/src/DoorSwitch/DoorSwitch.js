@@ -2,6 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import './DoorSwitch.scss';
 
+/*
+Toggle Switch Component
+Note: id, checked and onChange are required for ToggleSwitch component to function.
+The props name, small, disabled and optionLabels are optional.
+Usage: <ToggleSwitch id="id" checked={value} onChange={checked => setValue(checked)}} />
+*/
+
 const DoorSwitch = ({ id, name, checked, onChange, optionLabels, small, disabled }) => {
  
   return(            
@@ -18,16 +25,16 @@ const DoorSwitch = ({ id, name, checked, onChange, optionLabels, small, disabled
             />
           
           <div className="curtain__panel curtain__panel--left">
-            <h1>Click to open </h1>
+            <h1>Click to op</h1>
           </div>
           
           <div className="curtain__content">
-          <img src="froggo.png"/>
+          <img alt="" src="froggo.png"/>
             <h2>Door Unlocked!</h2>
           </div>
           
           <div className="curtain__panel curtain__panel--right">
-            <h1>&nbsp; the door</h1>
+            <h1>en the door</h1>
           </div>          
         </div> 
       </div>
