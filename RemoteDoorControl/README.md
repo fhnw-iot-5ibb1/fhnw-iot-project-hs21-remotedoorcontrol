@@ -22,12 +22,12 @@ Die Halterung für Motor, Fingerprint, Verschalung für Raspberry & Arduino sind
 # Project Setup
 
 **Requirements**
-- DC Motor : https://de.aliexpress.com/item/4001171204865.html?spm=a2g0o.productlist.0.0.6cf22174bsHSHZ&algo_pvid=7be3442c-5065-4bd0-bfb2-10de5b5a7531&algo_exp_id=7be3442c-5065-4bd0-bfb2-10de5b5a7531-15&pdp_ext_f=%7B%22sku_id%22%3A%2212000015990025900%22%7D 
-- Raspberry 4 : https://www.raspberrypi.com/products/raspberry-pi-4-model-b/
-- Arduino UNO : https://store.arduino.cc/products/arduino-uno-rev3/
-- IC Motor control : https://de.aliexpress.com/item/32844099228.html?spm=a2g0o.productlist.0.0.3f4648faXsiuPd&algo_pvid=48b7dc4e-e552-471c-b890-9da8f2f9c169&algo_exp_id=48b7dc4e-e552-471c-b890-9da8f2f9c169-3&pdp_ext_f=%7B%22sku_id%22%3A%2265215204221%22%7D
-- Fingerprint : https://de.aliexpress.com/item/32863746593.html?spm=a2g0o.detail.1000023.4.4c137738Mbhi9o
-- Endstop : https://de.aliexpress.com/item/1005003341364053.html?spm=a2g0o.productlist.0.0.4c071c2fWjLzoe&algo_pvid=5167e6be-1785-477d-864d-ef14ff6518ba&aem_p4p_detail=20211030044023451290956538800023611694&algo_exp_id=5167e6be-1785-477d-864d-ef14ff6518ba-4&pdp_ext_f=%7B%22sku_id%22%3A%2212000025305718909%22%7D
+- [DC Motor](https://de.aliexpress.com/item/4001171204865.html?spm=a2g0o.productlist.0.0.6cf22174bsHSHZ&algo_pvid=7be3442c-5065-4bd0-bfb2-10de5b5a7531&algo_exp_id=7be3442c-5065-4bd0-bfb2-10de5b5a7531-15&pdp_ext_f=%7B%22sku_id%22%3A%2212000015990025900%22%7D) 
+- [Raspberry 4](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/)
+- [Arduino UNO](https://store.arduino.cc/products/arduino-uno-rev3/)
+- [IC Motor control](https://de.aliexpress.com/item/32844099228.html?spm=a2g0o.productlist.0.0.3f4648faXsiuPd&algo_pvid=48b7dc4e-e552-471c-b890-9da8f2f9c169&algo_exp_id=48b7dc4e-e552-471c-b890-9da8f2f9c169-3&pdp_ext_f=%7B%22sku_id%22%3A%2265215204221%22%7D)
+- [Fingerprint](https://de.aliexpress.com/item/32863746593.html?spm=a2g0o.detail.1000023.4.4c137738Mbhi9o)
+- [Endstop](https://de.aliexpress.com/item/1005003341364053.html?spm=a2g0o.productlist.0.0.4c071c2fWjLzoe&algo_pvid=5167e6be-1785-477d-864d-ef14ff6518ba&aem_p4p_detail=20211030044023451290956538800023611694&algo_exp_id=5167e6be-1785-477d-864d-ef14ff6518ba-4&pdp_ext_f=%7B%22sku_id%22%3A%2212000025305718909%22%7D)
 
 ### Zerotrust-VPN Configuration
 
