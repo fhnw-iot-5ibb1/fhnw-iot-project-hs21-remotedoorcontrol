@@ -50,6 +50,7 @@ export const DoorLog = () => {
             </tbody>
 
         </table>
+        <iframe title="chart" width="450" height="260" src="https://thingspeak.com/channels/1628259/widgets/406200" sandbox=''></iframe>
         </div>
         )
 }

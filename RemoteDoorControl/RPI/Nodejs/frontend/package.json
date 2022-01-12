@@ -7,10 +7,14 @@
     "@testing-library/jest-dom": "^5.15.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "@types/leaflet": "^1.7.8",
+    "@types/react": "^17.0.38",
     "axios": "^0.24.0",
+    "leaflet": "^1.7.1",
     "node-sass": "^6.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-leaflet": "^3.2.4",
     "react-scripts": "4.0.3",
     "react-spring": "^9.3.3",
     "react-table": "^7.7.0",
@@ -19,9 +23,10 @@
   },
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",
-    "build": "react-scripts build",
+    "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "stop": "pkill --signal SIGINT remotedoorcontrol_frontend"
   },
   "eslintConfig": {
     "extends": [
@@ -29,16 +34,9 @@
       "react-app/jest"
     ]
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ]
 }

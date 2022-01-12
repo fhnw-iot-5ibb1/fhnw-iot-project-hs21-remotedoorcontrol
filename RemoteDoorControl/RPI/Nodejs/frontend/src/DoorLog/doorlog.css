@@ -25,6 +25,10 @@ doorlog {
         color: white;
     }
 
+iframe{
+    border: 1px solid #cccccc;
+}
+
 .LoggingTable{
     align-items: center;    
     color: #fff;
