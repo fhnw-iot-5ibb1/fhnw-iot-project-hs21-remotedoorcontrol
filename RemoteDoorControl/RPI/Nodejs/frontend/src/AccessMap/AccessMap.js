@@ -18,7 +18,7 @@ const AccessMap = ({ accessLocations, geolocationCords }) => {
         <MapContainer center={[47.3667,8.55]} zoom={2}scrollWheelZoom={false}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'/>
-            
+            <Marker icon={greenIcon} position={[geolocationCords.latitude, geolocationCords.longitude]}></Marker>
             {accessLocations.data && accessLocations.data.length > 0 && accessLocations.data.map(marker => (
             <Marker
                 position={[
@@ -29,8 +29,7 @@ const AccessMap = ({ accessLocations, geolocationCords }) => {
                 <Popup>Access request!</Popup>
             </Marker>
             ))}
-            <Marker icon={greenIcon} position={[geolocationCords.latitude, geolocationCords.longitude]}></Marker>
-         </MapContainer>
+             </MapContainer>
         )
 }
 

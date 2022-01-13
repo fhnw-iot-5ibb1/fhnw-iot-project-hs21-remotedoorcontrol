@@ -37,7 +37,7 @@ function App() {
         });
         //axios.get("https://3to5.ch:4001/api/total_locations", { httpsAgent: agent }).then(result => {console.log(result)});
     
-      }, 3000);               
+      }, 1000);               
       return () => clearInterval(timer);
     });
 
@@ -54,12 +54,30 @@ function App() {
         }]);
     }*/
 
-    const requestGeoLocationCoords = () => {   
-      if(!accessGranted){   
-        navigator.permissions.query({name:'geolocation'}).then(function(result){
-          //setGeolocationAccessPending(true);
-          if (result.state === 'granted') {
-            setAccessGranted(true);       
+    const requestGeoLocationCoords = () => {
+      if (!navigator.permissions || !navigator.geolocation) {
+        alert('Geolocation is not supported by your browser, please use another browser');
+        return;
+      }
+      if(accessGranted){
+        navigator.geolocation.getCurrentPosition(function(position) {
+          setGeoLocationCords(position.coords);
+          axios.get("https://3to5.ch:4001/api/location?geo1="+position.coords.longitude+"&geo2="+position.coords.latitude, { httpsAgent: agent } ,position.coords).then(
+            result => {
+              setAccessLocations(result);
+              //console.log(result);
+            },
+            err => {
+              console.log(err);
+            }
+          );              
+        });
+      }
+      //if(!accessGranted){   
+        navigator.permissions.query({name:'geolocation'}).then( permission => {
+          if (permission.state === 'granted') {
+            setAccessGranted(true);
+            setGeolocationAccessPending(false);  
             navigator.geolocation.getCurrentPosition(function(position) {
               setGeoLocationCords(position.coords);
               axios.get("https://3to5.ch:4001/api/location?geo1="+position.coords.longitude+"&geo2="+position.coords.latitude, { httpsAgent: agent } ,position.coords).then(
@@ -71,16 +89,20 @@ function App() {
                   console.log(err);
                 }
               );              
-          });
-            //showMap();
-          } else if (result.state === 'prompt') {
-            console.log("prompt");
-            //showButtonToEnableMap();
+            });
+          } else if(permission.state === 'prompt'){
+            setAccessGranted(false);
+            if(!geolocationAccessPending){
+              setGeolocationAccessPending(true);
+              navigator.geolocation.getCurrentPosition(function(position) {
+                setAccessGranted(true);
+                setGeoLocationCords(position.coords);              
+            });
+            }            
           }
-          //setGeolocationAccessPending(false);
-        });       
+        });
+      //}
     }
-  }
 
     const requestDoorState = () => {
         if(!geolocationAccessPending){
@@ -146,59 +168,3 @@ function App() {
 }
 
 export default App;
-
-
-    /*const getLocation = () => {
-        if (!navigator.geolocation) {
-          //setStatus('Geolocation is not supported by your browser');
-        } else {
-          // setStatus('Locating...');
-          navigator.geolocation.getCurrentPosition((position) => {
-            console.log(position);
-          }, () => {
-           // setStatus('Unable to retrieve your location');
-          });
-        }
-
-        return null;
-      }
-      */
-
-          /*
-    const getCoords = () => {
-        return new Promise((resolve, reject) =>
-        navigator.permissions ?
-    
-          // Permission API is implemented
-          navigator.permissions.query({
-            name: 'geolocation'
-          }).then(permission =>
-            // is geolocation granted?
-            permission.state === "granted"
-              ? navigator.geolocation.getCurrentPosition(pos => resolve(pos.coords)) 
-              : resolve(null)
-          ) :
-    
-        // Permission API was not implemented
-        reject(new Error("Permission API is not supported"))
-      )
-    } 
-
-    */
-
-    
-    /*const requestInitialDoorState = () => {        
-        requestGeoLocationCoords();
-        requestClientLocation();
-        axios.get("https://3to5.ch:4001/api/status", { httpsAgent: agent }).then(
-        result => {
-            setLoaded(false);
-            setError(false);            
-            
-        },
-        error => {
-            setError("asd"); 
-        }
-    );
-    }
-    */
