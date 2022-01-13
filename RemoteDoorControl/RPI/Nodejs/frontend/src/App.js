@@ -48,7 +48,11 @@ function App() {
           return { ...previousState, totalOperations: result.data.data }
           });
         });
-        //axios.get("https://3to5.ch:4001/api/total_locations", { httpsAgent: agent }).then(result => {console.log(result)});
+        axios.get("https://3to5.ch:4001/api/total_locations", { httpsAgent: agent }).then(result => {
+          setDashboard(previousState => {
+            return { ...previousState, totalLocations: result.data.data }
+            });
+        });
     
       }, 1000);               
       return () => clearInterval(timer);
@@ -93,7 +97,8 @@ function App() {
               navigator.geolocation.getCurrentPosition(function(position) {
                 setAccessGranted(true);
                 setGeoLocationCords(position.coords); 
-                axios.get("https://3to5.ch:4001/api/location?geo1="+position.coords.longitude+"&geo2="+position.coords.latitude, { httpsAgent: agent } ,position.coords).then(
+                const rounding = 3;
+                axios.get("https://3to5.ch:4001/api/location?geo1="+position.coords.longitude.toFixed(rounding)+"&geo2="+position.coords.latitude.toFixed(rounding), { httpsAgent: agent } ,position.coords).then(
               result => {
                 setAccessLocations(result);
                 console.log(result);
