@@ -1,12 +1,13 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require('cors');
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const User = require("./model/user");
-const auth = require("./middleware/auth");
+var SerialPort = require('serialport');
+var bodyParser = require('body-parser');  
+var Readline = require('@serialport/parser-readline');
+const fs = require('fs')
 
 const app = express();
+// ################ App Settings #################
 app.use(express.json({ limit: "50mb" }));
 
 // not needed when routed internally
@@ -15,29 +16,6 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
-
-var SerialPort = require('serialport');
-var Readline = require('@serialport/parser-readline');
-
-var responseUTF = "";
-
-// Serial
-var portName = '/dev/ttyUSB0';
-var sp = new SerialPort(portName, {
-        baudRate: 9600,
-        dataBits: 8,
-        parity: 'none',
-        stopBits: 1,
-        flowControl: false
-}); // instanciate serial port
-
-sp.on('open',function() {
-  console.log('Serial Port ' + portName + ' is opened.');
-});
-
-
-var parser = sp.pipe(new Readline('\r'));
-const timer = ms => new Promise( res => setTimeout(res, ms));
 
 const session = require('cookie-session');
 app.use(
@@ -48,21 +26,78 @@ app.use(
   })
 );
 
+// Initialize SerialPort on ttyUSB0
+var portName = '/dev/ttyUSB0';
+var sp = new SerialPort(portName, {
+        baudRate: 9600,
+        dataBits: 8,
+        parity: 'none',
+        stopBits: 1,
+        flowControl: false
+}); // instanciate serial port
+var parser = sp.pipe(new Readline('\r'));
+var responseUTF = "";
+var operationsCounter = 0;
+var accessCounter = 0;
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
+
+// Handler when new data received from USB-Serial
 parser.on('data', function (data) {
   responseUTF = data.toString('utf-8');
   console.log(responseUTF);
 });
 
 app.get("/api/door", (req, res) => {  
-    sp.write('doorAction\n');
-    return res.status(200).json({status: 'ok', data:responseUTF});
+  sp.write('doorAction\n');
+  operationsCounter++;
+  accessCounter++;
+  return res.status(200).json({status: 'ok', data:responseUTF});
 });
-
 
 app.get("/api/status", (req, res) => {
-    sp.write('getState\n');     
-    return res.status(200).json({status: 'ok', data:responseUTF});
+  sp.write('getState\n');     
+  accessCounter++;
+  return res.status(200).json({status: 'ok', data:responseUTF});
 });
+
+app.get("/api/total_operations", (req, res) => {
+  return res.status(200).json({status: 'ok', data:operationsCounter})
+});
+
+app.get("/api/total_access", (req, res) => {
+  return res.status(200).json({status: 'ok', data:accessCounter})
+});
+
+app.get("/api/total_locations", (req, res) => {
+
+});
+
+app.get("/api/location", urlencodedParser, function (req, res) {  
+  // Prepare output in JSON format  
+  response = {  
+      longitude:req.query.geo1,  
+      latitude:req.query.geo2 
+  };
+
+  const existUsers = getUserData();
+  existUsers.push(JSON.stringify(response));
+  saveUserData(existUsers);
+
+  return res.status(200).json(existUsers);  
+})  
+
+/* util functions */
+//read the user data from json file
+const saveUserData = (data) => {
+  const stringifyData = JSON.stringify(data)
+  fs.writeFileSync('locations.json', stringifyData)
+}
+//get the user data from json file
+const getUserData = () => {
+  const jsonData = fs.readFileSync('locations.json')
+  return JSON.parse(jsonData)    
+}
+/* util functions ends */
 
 // This should be the last route else any after it won't work
 app.use("*", (req, res) => {

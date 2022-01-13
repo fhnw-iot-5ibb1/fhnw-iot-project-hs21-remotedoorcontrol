@@ -1,0 +1,7 @@
+.doorState{
+    width: 100%;
+    background-color: green;
+    height: 50px;
+    text-align: center;
+    padding: 12px;
+}

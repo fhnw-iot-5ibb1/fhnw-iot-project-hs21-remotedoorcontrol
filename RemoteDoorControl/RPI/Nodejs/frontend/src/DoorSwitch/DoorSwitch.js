@@ -12,50 +12,53 @@ Usage: <ToggleSwitch id="id" checked={value} onChange={checked => setValue(check
 const DoorSwitch = ({ id, name, checked, onChange, optionLabels, small, disabled }) => {
  
   return(            
-      <div className="curtain">
-        <div className="curtain__wrapper">
-        <input
-                type="checkbox"
-                name={name}
-                className="door-switch-checkbox"
-                id={id}
-                checked={checked}
-                onChange={e => onChange(e.target.checked)}
-                disabled={disabled}
+    <div className={"door-switch" + (small ? " small-switch" : "")}>
+    <input
+        type="checkbox"
+        name={name}
+        className="door-switch-checkbox"
+        id={id}
+        checked={checked}
+        onChange={e => onChange(e.target.checked)}
+        disabled={disabled}
+    />
+    {id ? (
+        <label className="door-switch-label" htmlFor={id}>
+            <span
+                className={
+                    disabled
+                        ? "door-switch-inner door-switch-disabled"
+                        : "door-switch-inner"
+                }
+                data-yes={optionLabels[0]}
+                data-no={optionLabels[1]}
             />
-          
-          <div className="curtain__panel curtain__panel--left">
-            <h1>Click to op</h1>
-          </div>
-          
-          <div className="curtain__content">
-          <img alt="" src="froggo.png"/>
-            <h2>Door Unlocked!</h2>
-          </div>
-          
-          <div className="curtain__panel curtain__panel--right">
-            <h1>en the door</h1>
-          </div>          
-        </div> 
-      </div>
-
-    );   
+            <span
+                className={
+                    disabled
+                        ? "door-switch-switch door-switch-disabled"
+                        : "door-switch-switch"
+                }
+            />
+        </label>
+    ) : null}
+</div>
+);
 }
-
 
 // Set optionLabels for rendering.
 DoorSwitch.defaultProps = {
-    optionLabels: ["Open", "Close"],
+optionLabels: ["Open", "Close"],
 };
 
 DoorSwitch.propTypes = {
-    id: PropTypes.string.isRequired,
-    checked: PropTypes.bool.isRequired,
-    onChange: PropTypes.func.isRequired,
-    name: PropTypes.string,
-    optionLabels: PropTypes.array,
-    small: PropTypes.bool,
-    disabled: PropTypes.bool
+id: PropTypes.string.isRequired,
+checked: PropTypes.bool.isRequired,
+onChange: PropTypes.func.isRequired,
+name: PropTypes.string,
+optionLabels: PropTypes.array,
+small: PropTypes.bool,
+disabled: PropTypes.bool
 };
 
 export default DoorSwitch;

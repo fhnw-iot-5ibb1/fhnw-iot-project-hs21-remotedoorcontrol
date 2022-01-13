@@ -1,92 +1,99 @@
-.curtain {
-  margin: 0 auto;
-  width: 100%;
-  height: 50vh;
-  overflow: hidden;
-  
-  &__wrapper {
-    width: 100%;
-    height: 100%;
-    
-    input[type=checkbox] {
-      position: absolute;
+.door-switch {
+  position: relative;
+  width: 100px;
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  text-align: left;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  &-checkbox {
+      display: none;
+  }
+
+  &-label {
+      display: block;
+      overflow: hidden;
       cursor: pointer;
-      width: 100%;
-      height: 100%;
-      z-index: 100;
-      opacity: 0;
+      border: 0 solid #bbb;
+      border-radius: 20px;
+      margin: 0;
+  }
+
+  &-inner {
+      display: block;
+      width: 200%;
+      margin-left: -100%;
+      transition: margin 0.3s ease-in 0s;
+
+      &:before,
+      &:after {
+          display: block;
+          float: left;
+          width: 50%;
+          height: 34px;
+          padding: 0;
+          line-height: 34px;
+          font-size: 14px;
+          color: white;
+          font-weight: bold;
+          box-sizing: border-box;
+      }
+
+      &:before {
+          content: attr(data-yes);
+          text-transform: uppercase;
+          padding-left: 10px;
+          background-color: #f90;
+          color: #fff;
+      }
+  }
+
+  &-disabled {
+      background-color: #ddd;
+      cursor: not-allowed;
+
+      &:before {
+          background-color: #ddd;
+          cursor: not-allowed;
+      }
+  }
+
+  &-inner:after {
+      content: attr(data-no);
+      text-transform: uppercase;
+      padding-right: 10px;
+      background-color: #bbb;
+      color: #fff;
+      text-align: right;
+  }
+
+  &-switch {
+      display: block;
+      width: 24px;
+      margin: 5px;
+      background: #fff;
+      position: absolute;
       top: 0;
-      left: 0;
-      
-      // When the checkbox is checked...
-      &:checked {
-        
-        // Slide the first panel
-        &~div.curtain__panel--left {
-          transform: translateX(0);
-        }
-        
-        // Slide the second panel
-        &~div.curtain__panel--right {
-          transform: translateX(0);
-        }
+      bottom: 0;
+      right: 65px;
+      border: 0 solid #bbb;
+      border-radius: 20px;
+      transition: all 0.3s ease-in 0s;
+  }
+
+  &-checkbox:checked + &-label {
+      .door-switch-inner {
+          margin-left: 0;
       }
-    }
-  }
-  
-  &__panel {
-    display: flex;
-    align-items: center;
-    background: orange;
-    color: #fff;
-    float: left;
-    position: relative;
-    width: 50%;
-    height: 100vh;
-    transition: all 1s ease-out;
-    z-index: 2;
-    &--left {
-      justify-content: flex-end;
-      transform: translateX(-100%);
-    }
-    &--right {
-      justify-content: flex-start;
-      transform: translateX(100%);
-    }
-  }
-  
-  &__content {
-    align-items: center;
-    background: #333;
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    height: 94vh;
-    justify-content: center;
-    padding: 1rem 0;
-    position: absolute;
-    text-align: center;
-    z-index: 1;
-    width: 100%;
 
-    img {
-      width: 20%;
-    }
-    
-
-    @media only screen and (max-width: 500px) {
-      img {
-        width: 70%!important;
+      .door-switch-switch {
+          right: 0px;
       }
-    }    
-  
-    
   }
-
-}
-
-input {
-  color: #000;
 }
 
 html {
@@ -95,7 +102,6 @@ html {
 body {
   font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
   height: 100%;
-  padding-top: 2em;
   text-align: center;
 }
 h1,
@@ -116,4 +122,3 @@ input {
   margin: 1em auto;
   text-align: center;
 }
-
