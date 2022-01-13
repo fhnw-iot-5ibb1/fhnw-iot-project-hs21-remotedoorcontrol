@@ -74,26 +74,32 @@ app.get("/api/total_locations", (req, res) => {
 
 app.get("/api/location", urlencodedParser, function (req, res) {  
   // Prepare output in JSON format  
+  //console.log(req);
   response = {  
       longitude:req.query.geo1,  
       latitude:req.query.geo2 
   };
 
-  const existUsers = getUserData();
-  existUsers.push(JSON.stringify(response));
-  saveUserData(existUsers);
+  const existingLocations = getLocationData();
+  for (var i=0; i<existingLocations.length; i++) { //iterate through each object in an array
+    if (JSON.stringify(existingLocations[i]).replace(/\\/g, "") === ('"' + JSON.stringify(response) + '"')) {
+        return res.status(200).json(existingLocations); 
+     }
+}
+  existingLocations.push(JSON.stringify(response));
+  saveLocationData(existingLocations);
 
-  return res.status(200).json(existUsers);  
+  return res.status(200).json(existingLocations);  
 })  
 
 /* util functions */
 //read the user data from json file
-const saveUserData = (data) => {
+const saveLocationData = (data) => {
   const stringifyData = JSON.stringify(data)
   fs.writeFileSync('locations.json', stringifyData)
 }
 //get the user data from json file
-const getUserData = () => {
+const getLocationData = () => {
   const jsonData = fs.readFileSync('locations.json')
   return JSON.parse(jsonData)    
 }

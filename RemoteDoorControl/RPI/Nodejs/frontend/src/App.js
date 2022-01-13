@@ -18,7 +18,20 @@ function App() {
     let [accessGranted, setAccessGranted] = useState(false);
     let [dashboard, setDashboard] = useState({totalOperations:0, totalAccess:0, totalLocations:0})
     const [seconds, setSeconds] = useState(1);
+    const agent = new https.Agent({  rejectUnauthorized: false });
     
+    const onDoorChange = (checked) => {
+      //setDoor(checked);
+      axios.get("https://3to5.ch:4001/api/door", { httpsAgent: agent }).then(
+           result => {
+               addWebhookIFTTT(checked ? "dooropen" : "doorclose");             
+           },
+           error => {
+               setError("Error on opening door!");
+           }
+       );
+     }
+
     useEffect(() => {
       const timer = setInterval(() => {    
         setSeconds(seconds + 1); 
@@ -41,75 +54,9 @@ function App() {
       return () => clearInterval(timer);
     });
 
-      // At request level
-      const agent = new https.Agent({  
-        rejectUnauthorized: false
-      });
-
-      // handle click event of the button to add item
-    /*const addMoreLocations = (locationResponse) => {
-        setAccessLocations(prevItems => [...prevItems, {
-        id: prevItems.length,
-        value: locationResponse
-        }]);
-    }*/
-
-    const requestGeoLocationCoords = () => {
-      if (!navigator.permissions || !navigator.geolocation) {
-        alert('Geolocation is not supported by your browser, please use another browser');
-        return;
-      }
-      if(accessGranted){
-        navigator.geolocation.getCurrentPosition(function(position) {
-          setGeoLocationCords(position.coords);
-          axios.get("https://3to5.ch:4001/api/location?geo1="+position.coords.longitude+"&geo2="+position.coords.latitude, { httpsAgent: agent } ,position.coords).then(
-            result => {
-              setAccessLocations(result);
-              //console.log(result);
-            },
-            err => {
-              console.log(err);
-            }
-          );              
-        });
-      }
-      //if(!accessGranted){   
-        navigator.permissions.query({name:'geolocation'}).then( permission => {
-          if (permission.state === 'granted') {
-            setAccessGranted(true);
-            setGeolocationAccessPending(false);  
-            navigator.geolocation.getCurrentPosition(function(position) {
-              setGeoLocationCords(position.coords);
-              axios.get("https://3to5.ch:4001/api/location?geo1="+position.coords.longitude+"&geo2="+position.coords.latitude, { httpsAgent: agent } ,position.coords).then(
-                result => {
-                  setAccessLocations(result);
-                  //console.log(result);
-                },
-                err => {
-                  console.log(err);
-                }
-              );              
-            });
-          } else if(permission.state === 'prompt'){
-            setAccessGranted(false);
-            if(!geolocationAccessPending){
-              setGeolocationAccessPending(true);
-              navigator.geolocation.getCurrentPosition(function(position) {
-                setAccessGranted(true);
-                setGeoLocationCords(position.coords);              
-            });
-            }            
-          }
-        });
-      //}
-    }
-
     const requestDoorState = () => {
-        if(!geolocationAccessPending){
-            requestClientLocation();
-            requestGeoLocationCoords();
-        } 
-
+        // requestClientLocation();
+        requestGeoLocationCoords();
         axios.get("https://3to5.ch:4001/api/status", { httpsAgent: agent }).then(
         result => {            
             setLoaded(true);
@@ -121,6 +68,55 @@ function App() {
             setError("asd"); 
         }
     );
+    }
+
+    const requestAccess = () => {
+      navigator.permissions.query({name:'geolocation'}).then( permission => {
+        /*if (permission.state === 'granted') {
+          console.log('granted');
+          navigator.geolocation.getCurrentPosition(function(position) {
+            setGeoLocationCords(position.coords);
+            setAccessGranted(true);
+            axios.get("https://3to5.ch:4001/api/location?geo1="+position.coords.longitude+"&geo2="+position.coords.latitude, { httpsAgent: agent } ,position.coords).then(
+              result => {
+                setAccessLocations(result);
+                console.log(result);
+              },
+              err => {
+                console.log(err);
+              }
+            );              
+          });
+        }*/if(permission.state === 'prompt'){
+            if(!geolocationAccessPending){
+              setGeolocationAccessPending(true);
+              navigator.geolocation.getCurrentPosition(function(position) {
+                setAccessGranted(true);
+                setGeoLocationCords(position.coords); 
+                axios.get("https://3to5.ch:4001/api/location?geo1="+position.coords.longitude+"&geo2="+position.coords.latitude, { httpsAgent: agent } ,position.coords).then(
+              result => {
+                setAccessLocations(result);
+                console.log(result);
+              },
+              err => {
+                console.log(err);
+              }
+            );             
+            });
+          }
+        }else if(permission.state === 'denied'){
+          setGeolocationAccessPending(false);
+        }
+      });
+    }
+
+    const requestGeoLocationCoords = () => {
+      if (!navigator.permissions || !navigator.geolocation) {
+        alert('Geolocation is not supported by your browser, please use another browser');
+        return;
+      }
+
+      requestAccess();
     }
 
     const requestClientLocation = () => {
@@ -142,18 +138,6 @@ function App() {
         .catch(err => {
           console.log("error in IFTTT request", err);
         })
-      }
-
-    const onDoorChange = (checked) => {
-       //setDoor(checked);
-       axios.get("https://3to5.ch:4001/api/door", { httpsAgent: agent }).then(
-            result => {
-                addWebhookIFTTT(checked ? "dooropen" : "doorclose");             
-            },
-            error => {
-                setError("Error on opening door!");
-            }
-        );
       }
 
     return ( 
