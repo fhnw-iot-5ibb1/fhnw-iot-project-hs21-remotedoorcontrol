@@ -23,7 +23,7 @@ The following deliverables are mandatory.
 ### Source code
 Source code, Arduino C, JS or Python, committed to (this) project repo.
 
-[RemoteDoorControl/Arduino/DoorControl.ino](RemoteDoorControl/Arduino/00-Motor_Control.ino)
+[RemoteDoorControl/Arduino/DoorControl.ino](RemoteDoorControl/Arduino/DoorControl.ino)
 
 [RemoteDoorControl/RPI/Nodejs/frontend/client.js](RemoteDoorControl/RPI/Nodejs/frontend/client.js)
 
@@ -36,7 +36,7 @@ Source code, Arduino C, JS or Python, committed to (this) project repo.
 ### Presentation
 4-slide presentation, PDF format, committed to (this) project repo.
 
-[MY_TEAM_PROJECT_PRESENTATION.pdf](MY_TEAM_PROJECT_PRESENTATION.pdf)
+[RDC_PRESENTATION.pdf](RemoteDoorControl/doc/RDC_Präsentation.pdf)
 
 1) Use-case of your project.
 2) Reference model of your project.
@@ -46,11 +46,11 @@ Source code, Arduino C, JS or Python, committed to (this) project repo.
 ### Live demo
 Working end-to-end prototype, "device to cloud", part of your 10' presentation.
 
-[https://192.168.192.20:4001/](https://192.168.192.20:4001/)
+[https://3to5.ch:3000/](https://3to5.ch:3000/)
 
-1) Api call on Raspberry Pi triggers triggers event on Arduino
-2) The door will be opened
-3) Response will be sent to the API caller
+1) Sensor input on a IoT device triggers an event.
+2) The event or measurement shows up online, in an app or Web client.
+3) The event triggers actuator output on the same or on a separate IoT device.
 
 ## Submission deadline
 Commit and push to (this) project repo before Demo Day, _17.01.2022, 00:00_.
