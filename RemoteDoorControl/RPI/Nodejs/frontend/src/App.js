@@ -22,7 +22,7 @@ function App() {
     
     const onDoorChange = (checked) => {
       //setDoor(checked);
-      axios.get("https://3to5.ch:4001/api/door", { httpsAgent: agent }).then(
+      axios.get("https://3to5.ch:4001/api/door/OpenOrClose", { httpsAgent: agent }).then(
            result => {
                addWebhookIFTTT(checked ? "dooropen" : "doorclose");             
            },
@@ -36,19 +36,19 @@ function App() {
       const timer = setInterval(() => {    
         setSeconds(seconds + 1); 
         requestDoorState();  
-        axios.get("https://3to5.ch:4001/api/total_access", { httpsAgent: agent }).then(
+        axios.get("https://3to5.ch:4001/api/service/TotalAccess", { httpsAgent: agent }).then(
           result => {           
             setDashboard(previousState => {
               return { ...previousState, totalAccess: result.data.data }
             });
           });
 
-        axios.get("https://3to5.ch:4001/api/total_operations", { httpsAgent: agent }).then(result => {
+        axios.get("https://3to5.ch:4001/api/service/TotalOperations", { httpsAgent: agent }).then(result => {
           setDashboard(previousState => {
           return { ...previousState, totalOperations: result.data.data }
           });
         });
-        axios.get("https://3to5.ch:4001/api/total_locations", { httpsAgent: agent }).then(result => {
+        axios.get("https://3to5.ch:4001/api/service/TotalAccessLocations", { httpsAgent: agent }).then(result => {
           setDashboard(previousState => {
             return { ...previousState, totalLocations: result.data.data }
             });
@@ -61,7 +61,7 @@ function App() {
     const requestDoorState = () => {
         // requestClientLocation();
         requestGeoLocationCoords();
-        axios.get("https://3to5.ch:4001/api/status", { httpsAgent: agent }).then(
+        axios.get("https://3to5.ch:4001/api/door/Status", { httpsAgent: agent }).then(
         result => {            
             setLoaded(true);
             setError(false);
@@ -74,43 +74,43 @@ function App() {
     );
     }
 
+    const sendAccessLocationToBackend = (position) => {
+      if(position !== undefined){
+        const rounding = 3;
+        axios.post("https://3to5.ch:4001/api/location/Create?geo1="+position.longitude.toFixed(rounding)+"&geo2="+position.latitude.toFixed(rounding), { httpsAgent: agent } ,position).then(
+          result => {
+            setAccessLocations(result);
+          },
+          err => {
+            console.log(err);
+          }
+        );
+      }
+    }
+
     const requestAccess = () => {
       navigator.permissions.query({name:'geolocation'}).then( permission => {
-        /*if (permission.state === 'granted') {
-          console.log('granted');
+        console.log(permission.state);
+        if (permission.state === 'granted') {
+          if(!accessGranted){          
           navigator.geolocation.getCurrentPosition(function(position) {
             setGeoLocationCords(position.coords);
             setAccessGranted(true);
-            axios.get("https://3to5.ch:4001/api/location?geo1="+position.coords.longitude+"&geo2="+position.coords.latitude, { httpsAgent: agent } ,position.coords).then(
-              result => {
-                setAccessLocations(result);
-                console.log(result);
-              },
-              err => {
-                console.log(err);
-              }
-            );              
+            sendAccessLocationToBackend(position.coords);              
           });
-        }*/if(permission.state === 'prompt'){
+        }
+        }if(permission.state === 'prompt'){
             if(!geolocationAccessPending){
               setGeolocationAccessPending(true);
               navigator.geolocation.getCurrentPosition(function(position) {
                 setAccessGranted(true);
                 setGeoLocationCords(position.coords); 
-                const rounding = 3;
-                axios.get("https://3to5.ch:4001/api/location?geo1="+position.coords.longitude.toFixed(rounding)+"&geo2="+position.coords.latitude.toFixed(rounding), { httpsAgent: agent } ,position.coords).then(
-              result => {
-                setAccessLocations(result);
-                console.log(result);
-              },
-              err => {
-                console.log(err);
-              }
-            );             
-            });
+                sendAccessLocationToBackend(position.coords);      
+              });
           }
         }else if(permission.state === 'denied'){
           setGeolocationAccessPending(false);
+          setAccessGranted(false);
         }
       });
     }
@@ -124,13 +124,13 @@ function App() {
       requestAccess();
     }
 
-    const requestClientLocation = () => {
+    /*const requestClientLocation = () => {
         axios.get("https://geolocation-db.com/json/").then(
             result => {
                 //addMoreLocations(result.data);
             }
         )
-    }
+    }*/
 
     const addWebhookIFTTT = (doorState) => {
       axios({
@@ -152,8 +152,6 @@ function App() {
         <br></br><AccessMap accessLocations={accessLocations} geolocationCords={geolocationCords}/>
         </>
     );
-
-    //<DoorLog/>
 }
 
 export default App;

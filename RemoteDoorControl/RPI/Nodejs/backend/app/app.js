@@ -5,10 +5,13 @@ var SerialPort = require('serialport');
 var bodyParser = require('body-parser');  
 var Readline = require('@serialport/parser-readline');
 const fs = require('fs')
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
 const app = express();
 // ################ App Settings #################
 app.use(express.json({ limit: "50mb" }));
+app.options('*', cors())
 
 // not needed when routed internally
 app.use(function(req, res, next) {
@@ -47,34 +50,42 @@ parser.on('data', function (data) {
   console.log(responseUTF);
 });
 
-app.get("/api/door", (req, res) => {  
+// This should be the last route else any after it won't work
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+app.get("/api/door/OpenOrClose", (req, res) => {  
   sp.write('doorAction\n');
   operationsCounter++;
   accessCounter++;
   return res.status(200).json({status: 'ok', data:responseUTF});
 });
 
-app.get("/api/status", (req, res) => {
+app.get("/api/door/Status", (req, res) => {
   sp.write('getState\n');     
   accessCounter++;
   return res.status(200).json({status: 'ok', data:responseUTF});
 });
 
-app.get("/api/total_operations", (req, res) => {
+app.get("/api/service/TotalOperations", (req, res) => {
   return res.status(200).json({status: 'ok', data:operationsCounter})
 });
 
-app.get("/api/total_access", (req, res) => {
+app.get("/api/service/TotalAccess", (req, res) => {
   return res.status(200).json({status: 'ok', data:accessCounter})
 });
 
-app.get("/api/total_locations", (req, res) => {
-
+app.get("/api/service/TotalAccessLocations", (req, res) => {
+  const existingLocations = getLocationData();
+  return res.status(200).json({status: 'ok', data:existingLocations.length})
 });
 
-app.get("/api/location", urlencodedParser, function (req, res) {  
-  // Prepare output in JSON format  
-  //console.log(req);
+app.get("/api/location/GetAll", function (req, res) {
+  const existingLocations = getLocationData();
+  return res.status(200).json(existingLocations);
+})
+
+app.post("/api/location/Create", urlencodedParser, function (req, res) {  
+  // Prepare output in JSON format
   response = {  
       longitude:req.query.geo1,  
       latitude:req.query.geo2 
@@ -86,8 +97,10 @@ app.get("/api/location", urlencodedParser, function (req, res) {
         return res.status(200).json(existingLocations); 
      }
 }
-  existingLocations.push(JSON.stringify(response));
-  saveLocationData(existingLocations);
+  if(response.latitude !== undefined && response.longitude !== undefined){
+    existingLocations.push(JSON.stringify(response));
+    saveLocationData(existingLocations);
+  }
 
   return res.status(200).json(existingLocations);  
 })  
@@ -107,14 +120,13 @@ const getLocationData = () => {
 
 // This should be the last route else any after it won't work
 app.use("*", (req, res) => {
-return res.status(404).json({
-  success: "false",
-  message: "Page not found",
-  error: {
-    statusCode: 404,
-    message: "You reached a route that is not defined on this server",
-  },
+  return res.status(404).json({
+    success: "false",
+    message: "Page not found",
+    error: {
+      statusCode: 404,
+      message: "You reached a route that is not defined on this server",
+    },
+  });
 });
-});
-
 module.exports = app;

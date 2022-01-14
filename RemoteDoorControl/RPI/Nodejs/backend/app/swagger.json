@@ -1,0 +1,92 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "RemoteDoorControl - SwaggerUI",
+      "description": "",
+      "version": "1.0"
+    },
+    "produces": ["application/json"],
+    "paths": {
+      "/api/door/OpenOrClose": {
+        "get": {
+            "x-swagger-router-controller": "Main",
+            "operationId": "index",
+            "tags": ["DoorControl"],
+            "description": "moves the bolt on the door (open/close)",
+            "parameters": [],
+            "responses": {}
+          }
+        },
+      "/api/door/Status": {
+        "get": {
+            "x-swagger-router-controller": "Main",
+            "operationId": "impossible",
+            "tags": ["DoorControl"],
+            "description": "return the motor state (e.g door open / close)",
+            "parameters": [],
+            "responses": {}
+          }
+        },
+       "/api/service/TotalOperations": {
+        "get": {
+          "x-swagger-router-controller": "Main",
+          "operationId": "impossible",
+          "tags": ["Operations"],
+          "description": "returns operations executed by Arduino",
+          "parameters": [],
+          "responses": {}
+        }
+      },
+      "/api/service/TotalAccess": {
+       "get": {
+         "x-swagger-router-controller": "Main",
+         "operationId": "impossible",
+         "tags": ["Operations"],
+         "description": "returns the amount of door open / closed",
+         "parameters": [],
+         "responses": {}
+       }
+     },
+       "/api/service/TotalAccessLocations": {
+        "get": {
+          "x-swagger-router-controller": "Main",
+          "operationId": "impossible",
+          "tags": ["Operations"],
+          "description": "return a list of permitted access locations (Fingerprint & Remote)",
+          "parameters": [],
+          "responses": {}
+        }
+      },
+      "/api/location/GetAll": {
+       "get": {
+         "x-swagger-router-controller": "Main",
+         "operationId": "impossible",
+         "tags": ["Location"],
+         "description": "get all access location from DB",
+         "parameters": [],
+         "responses": {}
+       }
+    },
+    "/api/location/Create": {
+       "post": {
+        "x-swagger-router-controller": "Main",
+        "operationId": "impossible",
+        "tags": ["Location"],
+        "description": "add access location to DB and return all locations accessed",
+        "parameters": [{
+            "name": "geo1", 
+            "in": "query", 
+            "required": true, 
+            "description": "longitude"
+          },
+          {
+            "name": "geo2", 
+            "in": "query", 
+            "required": true, 
+            "description": "latitude"
+          }],
+        "responses": {}
+      }
+     }
+    }
+ }

@@ -14,6 +14,8 @@ const AccessMap = ({ accessLocations, geolocationCords }) => {
         shadowSize: [41, 41]
       });
 
+      var itemCounter = 0;
+
     return (        
         <MapContainer center={[47.3667,8.55]} zoom={2}scrollWheelZoom={false}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -21,6 +23,7 @@ const AccessMap = ({ accessLocations, geolocationCords }) => {
             
             {accessLocations.data && accessLocations.data.length > 0 && accessLocations.data.map(marker => (
             <Marker
+                key={++itemCounter}
                 position={[
                     JSON.parse(marker).latitude,
                     JSON.parse(marker).longitude
@@ -31,7 +34,7 @@ const AccessMap = ({ accessLocations, geolocationCords }) => {
             
             ))}
 
-                <Marker icon={greenIcon} position={[geolocationCords.latitude, geolocationCords.longitude]}><Popup>Your position!</Popup></Marker>
+                <Marker key={++itemCounter} icon={greenIcon} position={[geolocationCords.latitude, geolocationCords.longitude]}><Popup>Your position!</Popup></Marker>
              </MapContainer>
         )
 }
