@@ -21,7 +21,9 @@ function App() {
     const agent = new https.Agent({  rejectUnauthorized: false });
     
     const onDoorChange = (checked) => {
-      //setDoor(checked);
+       
+        setDoor(checked);
+        setItems("loading...")
       axios.get("https://3to5.ch:4001/api/door/OpenOrClose", { httpsAgent: agent }).then(
            result => {
                addWebhookIFTTT(checked ? "dooropen" : "doorclose");             
@@ -62,11 +64,27 @@ function App() {
         // requestClientLocation();
         requestGeoLocationCoords();
         axios.get("https://3to5.ch:4001/api/door/Status", { httpsAgent: agent }).then(
-        result => {            
+            result => {
+
             setLoaded(true);
             setError(false);
-            setItems(result.data.data);
-            setDoor(result.data.data.slice(29, result.data.data.length -9) === '1' ? false : true);
+                
+
+                if (result.data.data.slice(29, result.data.data.length - 9) === '1' && !door) {
+                    setItems("Door open!")
+                }
+                else if (result.data.data.slice(29, result.data.data.length - 9) === '0' && door) {
+                    setItems("Door closed!")
+                }
+                else {
+                    console.log("door is:" + door);
+                    console.log(result.data.data);
+                    console.log("status is:" + result.data.data.slice(29, result.data.data.length - 9) === '0' )
+                    setItems("loading...")
+                    //setDoor(result.data.data.slice(29, result.data.data.length - 9) === '0')
+                }
+
+            
         },
         error => {
             setError("asd"); 
