@@ -11,13 +11,17 @@ Folgende API-Endpoint ist momentan vorgesehen:
 
 | Verb | Ressouce | Description |
 |:-----|:--------|:------|
-| GET | /api/door | moves the bolt on the door (open/close) |
-| GET | /api/status | get the door status (open/close) |
+| POST | /api/door | moves the bolt on the door (open/close) |
+| GET | /api/status | return the motor state (e.g door open / close) |
+| GET | /api/total_operations | returns operations executed by Arduino |
+| GET | /api/total_access | returns the amount of door open / closed |
+| GET | /api/total_locations | return a list of permitted access locations (Fingerprint & Remote) |
+| GET | /api/location | add access location to DB and returns all locations accessed |
 
 
 Die Halterung für Motor, Fingerprint, Verschalung für Raspberry & Arduino sind 3D-gedruckte Teile und in einer Miniatur Türe verbaut werden (für Demozwecke)
 
-![Alt text](ConceptDrawing.png "Concept")
+<img src="doc/ConceptDrawing.png" width="700" height="400">
 
 # Project Setup
 
@@ -39,6 +43,8 @@ Download Zerotier-VPN to access the Webservice
 3) Wait for confirmation of ZeroTier administrator
 
 Once connected to the Zerotrust Network: API calls can be made using:  https://3to5.ch:4001/api/
+
+<img src="doc/Zerotrust-Setup.jpg" width="500" height="300">
 
 **RaspberryPi (Server) Setup:**
 1) Access Raspberry SSH console access
@@ -92,3 +98,14 @@ Create certificate and place it into root folder of Nodejs app. Files: key.pem, 
 `openssl req -new -key key.pem -out csr.pem`
 `openssl x509 -req -days 9999 -in csr.pem -signkey key.pem -out cert.pem`
 `rm csr.pem`
+
+# 3D Printed parts
+## Door Lock
+
+<img src="doc/DoorLock1.png" width="200" height="500"><img src="doc/DoorLock2.png" width="200" height="500">
+
+## Prototype
+
+<img src="doc/Frontend_Windows.png" width="200" height="500"><img src="doc/Frontend_Mobile.png" width="200" height="500">
+
+
