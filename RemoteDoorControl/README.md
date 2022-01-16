@@ -1,4 +1,6 @@
 # IoT Engineering Project description
+
+<img src="doc/RemoteDoorControl_Box.jpg">
 ## Concept
 
 Remote steuerbares Türschloss mittels abgesicherter Zero-trust networking Lösung (265bit end2end verschlüsselt).
@@ -16,7 +18,7 @@ Folgende API-Endpoint ist momentan vorgesehen:
 | GET | /api/total_operations | returns operations executed by Arduino |
 | GET | /api/total_access | returns the amount of door open / closed |
 | GET | /api/total_locations | return a list of permitted access locations (Fingerprint & Remote) |
-| GET | /api/location | add access location to DB and returns all locations accessed |
+| POST | /api/location | add access location to DB and returns all locations accessed |
 
 
 Die Halterung für Motor, Fingerprint, Verschalung für Raspberry & Arduino sind 3D-gedruckte Teile und in einer Miniatur Türe verbaut werden (für Demozwecke)
@@ -76,7 +78,7 @@ Both applications run on a single raspberry connected to zerotier VPN network: p
 4) nodemon for development purposes is configure and run with `npm run dev`
 2.1) to start server in dispatched mode `forever start server.js`
 
-Backend-API is reachable under: https://3to5.ch:4001/api/
+Backend-API is reachable under: https://3to5.ch:4001/api/docs
 
 Troubleshooting: 
 1) Find blocking ports: `lsof -i :4001 -t` --> `kill xxx`
@@ -89,7 +91,9 @@ Troubleshooting:
 1) navigate to RemoteDoorControl/RPI/Nodejs/frontend
 2) run `npm install` 
 3) make sure SSL certificates are places on repositories root path
-4) `(HTTPS=true SSL_CRT_FILE=cert.pem SSL_KEY_FILE=key.pem npm start&) run production in HTTPS` will start the frontend-service on https://3to5.ch:3000
+4) `(HTTPS=true SSL_CRT_FILE=cert.pem SSL_KEY_FILE=key.pem npm start&)` run production in HTTPS will start the frontend-service
+
+Webapp is reachable under: https://3to5.ch:3000
 
 
 ### Generating self-signed-certificate
@@ -104,8 +108,25 @@ Create certificate and place it into root folder of Nodejs app. Files: key.pem, 
 
 <img src="doc/DoorLock1.png" width="200" height="500"><img src="doc/DoorLock2.png" width="200" height="500">
 
-## Prototype
+# Prototype
 
-<img src="doc/Frontend_Windows.png" width="200" height="500"><img src="doc/Frontend_Mobile.png" width="200" height="500">
+Webview
+<img src="doc/MobileView.jpg" width="200" height="500">
+
+## Videos
+
+Videos:
+[Fingerprint - Demo](https://www.youtube.com/watch?v=CA1w-btZJAM)
+[Remote Acces - Demo]()
+## Production Links
+[RemoteDoorControl - Webapp](https://3to5.ch:3000/)
+[RemoteDoorControl - Backend (Swagger-UI)](https://3to5.ch:4001/api/docs/)
 
 
+## Wiring
+
+<img src="doc/Wiring.jpg" >
+
+## IFTTT Setup
+
+<img src="doc/IFTTT.jpg" width="200" height="500"><img src="doc/IFTTT_Telegram.jpg" width="200" height="500">
