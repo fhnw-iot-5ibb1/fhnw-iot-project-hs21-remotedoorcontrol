@@ -2,10 +2,8 @@ import React, { useEffect, useState } from 'react';
 import DoorSwitch from './DoorSwitch/DoorSwitch'
 import DoorStateDisplay from './DoorStateDisplay/DoorStateDisplay'
 import AccessMap from './AccessMap/AccessMap'
-// import { DoorLog } from './DoorLog/DoorLog';
 import axios from 'axios';
 const https = require('https');
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'; 
 
 function App() {
     let [door, setDoor ] = useState(true);
@@ -21,9 +19,8 @@ function App() {
     const agent = new https.Agent({  rejectUnauthorized: false });
     
     const onDoorChange = (checked) => {
-       
-        setDoor(checked);
-        setItems("loading...")
+      setDoor(checked);
+      setItems("loading...")
       axios.get("https://3to5.ch:4001/api/door/OpenOrClose", { httpsAgent: agent }).then(
            result => {
                addWebhookIFTTT(checked ? "dooropen" : "doorclose");             
@@ -40,19 +37,19 @@ function App() {
         requestDoorState();  
         axios.get("https://3to5.ch:4001/api/service/TotalAccess", { httpsAgent: agent }).then(
           result => {           
-            setDashboard(previousState => {
+              setDashboard(previousState => {
               return { ...previousState, totalAccess: result.data.data }
             });
           });
 
         axios.get("https://3to5.ch:4001/api/service/TotalOperations", { httpsAgent: agent }).then(result => {
-          setDashboard(previousState => {
-          return { ...previousState, totalOperations: result.data.data }
+            setDashboard(previousState => {
+            return { ...previousState, totalOperations: result.data.data }
           });
         });
         axios.get("https://3to5.ch:4001/api/service/TotalAccessLocations", { httpsAgent: agent }).then(result => {
-          setDashboard(previousState => {
-            return { ...previousState, totalLocations: result.data.data }
+              setDashboard(previousState => {
+              return { ...previousState, totalLocations: result.data.data }
             });
         });
     
@@ -65,31 +62,28 @@ function App() {
         requestGeoLocationCoords();
         axios.get("https://3to5.ch:4001/api/door/Status", { httpsAgent: agent }).then(
             result => {
-
-            setLoaded(true);
-            setError(false);
-                
-
-                if (result.data.data.slice(29, result.data.data.length - 9) === '1' && !door) {
-                    setItems("Door open!")
-                }
-                else if (result.data.data.slice(29, result.data.data.length - 9) === '0' && door) {
-                    setItems("Door closed!")
-                }
-                else {
-                    console.log("door is:" + door);
-                    console.log(result.data.data);
-                    console.log("status is:" + result.data.data.slice(29, result.data.data.length - 9) === '0' )
-                    setItems("loading...")
-                    //setDoor(result.data.data.slice(29, result.data.data.length - 9) === '0')
-                }
-
-            
-        },
+              setLoaded(true);
+              setError(false);
+              parseAndUpdateStateFromBackend(result.data.data);
+          },
         error => {
             setError("asd"); 
+        });
+    }
+
+    const parseAndUpdateStateFromBackend = (doorState) => {
+      var jsonResult = JSON.parse(doorState.replace(/'/g, '"'));
+      if(jsonResult !== undefined){
+        if (jsonResult.motorA === 1 && door) {
+            setItems("Door open!")
         }
-    );
+        else if (jsonResult.motorA === 0 && !door) {
+            setItems("Door closed!")
+        }
+        else {
+            setItems("Loading...")
+        }       
+      }     
     }
 
     const sendAccessLocationToBackend = (position) => {
@@ -142,14 +136,6 @@ function App() {
       requestAccess();
     }
 
-    /*const requestClientLocation = () => {
-        axios.get("https://geolocation-db.com/json/").then(
-            result => {
-                //addMoreLocations(result.data);
-            }
-        )
-    }*/
-
     const addWebhookIFTTT = (doorState) => {
       axios({
           method: "POST",
@@ -172,4 +158,13 @@ function App() {
     );
 }
 
+    /*const requestClientLocation = () => {
+        axios.get("https://geolocation-db.com/json/").then(
+            result => {
+                //addMoreLocations(result.data);
+            }
+        )
+    }*/
+
 export default App;
+

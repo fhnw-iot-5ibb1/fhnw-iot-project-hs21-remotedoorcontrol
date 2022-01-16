@@ -47,7 +47,6 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 // Handler when new data received from USB-Serial
 parser.on('data', function (data) {
   responseUTF = data.toString('utf-8');
-  console.log(responseUTF);
 });
 
 // This should be the last route else any after it won't work
